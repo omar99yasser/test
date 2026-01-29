@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Backend Test</title>
+</head>
+
+<body>
+    <h1>Testing Backend Connection</h1>
+    <button onclick="testBackend()">Test Connection</button>
+    <pre id="result"></pre>
+
+    <script>
+        async function testBackend() {
+            const resultEl = document.getElementById('result');
+            resultEl.textContent = 'Testing...';
+
+            try {
+                const response = await fetch('http://localhost:5000/api/plan-route', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        start_location: "Hollywood",
+                        end_location: "Santa Monica",
+                        battery_percent: 80
+                    })
+                });
+
+                const data = await response.json();
+                resultEl.textContent = 'SUCCESS!\n\n' + JSON.stringify(data, null, 2);
+            } catch (error) {
+                resultEl.textContent = 'ERROR: ' + error.message + '\n\nFull error:\n' + error.stack;
+            }
+        }
+    </script>
+</body>
+
+</html>

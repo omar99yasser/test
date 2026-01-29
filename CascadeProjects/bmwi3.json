@@ -1,0 +1,112 @@
+{
+  "model": "BMW i3 eDrive35L",
+  "market": "China Only",
+  "production_years": "2022-Present",
+  "body_style": "Sedan",
+  "vehicle_type": "Electric Vehicle (BEV)",
+  
+  "dimensions": {
+    "length_mm": 4872,
+    "width_mm": 1846,
+    "height_mm": 1481,
+    "wheelbase_mm": 2966,
+    "curb_weight_kg": 1885,
+    "turning_circle_m": 12.0
+  },
+  
+  "performance": {
+    "motor_type": "Synchronous Electric Motor",
+    "motor_location": "Rear",
+    "drive_layout": "Rear-Wheel Drive",
+    "max_power_kw": 210,
+    "max_power_hp": 286,
+    "max_torque_nm": 400,
+    "acceleration_0_100_kmh_s": 6.2,
+    "top_speed_kmh": 180,
+    "top_speed_mph": 112
+  },
+  
+  "battery": {
+    "battery_type": "Lithium-ion",
+    "total_capacity_kwh": 70.3,
+    "usable_capacity_kwh": 66.1,
+    "voltage_v": 400
+  },
+  
+  "range_charging": {
+    "range_standard": "CLTC",
+    "range_km": 526,
+    "range_miles": 327,
+    "energy_consumption_kwh_100km": 14.3,
+    "ac_charging_power_kw": 11,
+    "ac_charge_time_0_100_h": 6.75,
+    "dc_charging_power_kw": 150,
+    "dc_charge_10_80_percent_min": 35,
+    "charging_port_type": "GB/T (China Standard)"
+  },
+  
+  "suspension_brakes": {
+    "front_suspension": "MacPherson Strut",
+    "rear_suspension": "Multi-link",
+    "front_brakes": "Ventilated Discs",
+    "rear_brakes": "Solid Discs",
+    "regenerative_braking": "Yes, with adjustable levels",
+    "tire_size_front": "225/50 R18",
+    "tire_size_rear": "225/50 R18"
+  },
+  
+  "interior_features": {
+    "seating_capacity": 5,
+    "infotainment_system": "BMW iDrive 8",
+    "display": "BMW Curved Display",
+    "instrument_cluster_size_inches": 12.3,
+    "central_display_size_inches": 14.9,
+    "head_up_display": "Optional",
+    "audio_system": "Harman Kardon (Optional)",
+    "climate_control": "3-zone Automatic",
+    "interior_materials": "Sensatec upholstery, aluminum accents",
+    "driver_assistance": "BMW Driving Assistant Professional (Optional)"
+  },
+  
+  "exterior_features": {
+    "headlights": "LED with Adaptive Function",
+    "taillights": "3D LED",
+    "grille": "BMW Iconic Glow kidney grille",
+    "door_handles": "Standard (not flush)",
+    "panoramic_roof": "Optional",
+    "wheel_options": "18-inch aerodynamic wheels"
+  },
+  
+  "safety_features": {
+    "airbags": 6,
+    "stability_control": "DSC (Dynamic Stability Control)",
+    "traction_control": "Yes",
+    "parking_assistant": "Yes, with Reversing Assistant",
+    "cruise_control": "Active Cruise Control with Stop&Go",
+    "lane_departure_warning": "Yes",
+    "front_collision_warning": "Yes",
+    "autonomous_emergency_braking": "Yes"
+  },
+  
+  "manufacturing": {
+    "production_location": "Shenyang, China",
+    "manufacturer": "BMW Brilliance Automotive Ltd.",
+    "platform": "CLAR (Modified for EV)",
+    "related_models": ["BMW 3 Series (G28 LWB)", "BMW i4 eDrive35"]
+  },
+  
+  "warranty": {
+    "vehicle_warranty_years": 3,
+    "vehicle_warranty_km": 100000,
+    "battery_warranty_years": 8,
+    "battery_warranty_km": 120000
+  },
+  
+  "additional_notes": [
+    "Exclusive to Chinese market",
+    "Based on long-wheelbase 3 Series (G28)",
+    "No relation to original i3 (2014-2022)",
+    "Direct competitor to Tesla Model 3 in China",
+    "Features extended rear legroom for Chinese market preference"
+  ]
+}

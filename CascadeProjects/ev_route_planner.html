@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMW i3 Route Planner | Intelligent EV Journey Planning</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bmw-blue: #1c69d4;
+            --bmw-dark-blue: #0a4a8f;
+            --bmw-light-blue: #4a90e2;
+            --carbon-black: #1a1a1a;
+            --steel-gray: #2d2d2d;
+            --aluminum: #e8e8e8;
+            --electric-blue: #00d4ff;
+            --success-green: #00c853;
+            --warning-orange: #ff6d00;
+            --danger-red: #d32f2f;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(180deg, #0a0a0a 0%, #1a1a1a 50%, #0f1419 100%);
+            min-height: 100vh;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, rgba(28, 105, 212, 0.15) 0%, rgba(0, 212, 255, 0.1) 100%);
+            padding: 60px 20px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(28, 105, 212, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(0, 212, 255, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .bmw-logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--bmw-blue) 0%, var(--electric-blue) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: 900;
+            box-shadow: 0 0 30px rgba(28, 105, 212, 0.5);
+            border: 3px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ffffff 0%, var(--electric-blue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 400;
+            margin-bottom: 40px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Dashboard Card */
+        .dashboard-card {
+            background: linear-gradient(145deg, rgba(45, 45, 45, 0.95) 0%, rgba(26, 26, 26, 0.95) 100%);
+            border-radius: 24px;
+            padding: 40px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 
+                0 30px 80px rgba(0, 0, 0, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            border-color: rgba(28, 105, 212, 0.3);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(28, 105, 212, 0.3);
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--bmw-blue) 0%, var(--electric-blue) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 0 20px rgba(28, 105, 212, 0.4);
+        }
+
+        .card-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .card-subtitle {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1rem;
+            margin-top: 5px;
+        }
+
+        /* Input Groups */
+        .input-group {
+            margin-bottom: 35px;
+        }
+
+        .input-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.95rem;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 16px 20px;
+            background: rgba(26, 26, 26, 0.8);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: #ffffff;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--bmw-blue);
+            background: rgba(26, 26, 26, 0.95);
+            box-shadow: 0 0 0 4px rgba(28, 105, 212, 0.2), 0 0 20px rgba(28, 105, 212, 0.3);
+        }
+
+        .input-field::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Speedometer-style Battery Display */
+        .gauge-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 30px auto;
+        }
+
+        .gauge-svg {
+            transform: rotate(-90deg);
+        }
+
+        .gauge-background {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.1);
+            stroke-width: 12;
+        }
+
+        .gauge-fill {
+            fill: none;
+            stroke: url(#gaugeGradient);
+            stroke-width: 12;
+            stroke-linecap: round;
+            stroke-dasharray: 565.48;
+            stroke-dashoffset: 565.48;
+            transition: stroke-dashoffset 0.5s ease;
+        }
+
+        .gauge-value {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .gauge-number {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ffffff 0%, var(--electric-blue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .gauge-unit {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 5px;
+        }
+
+        .gauge-label {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 500;
+        }
+
+        /* Slider Styling */
+        .slider-container {
+            position: relative;
+            padding: 25px 0;
+        }
+
+        .slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 10px;
+            outline: none;
+            -webkit-appearance: none;
+            background: linear-gradient(to right, var(--danger-red) 0%, var(--warning-orange) 50%, var(--success-green) 100%);
+            cursor: pointer;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--bmw-blue) 0%, var(--electric-blue) 100%);
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(28, 105, 212, 0.6), 0 4px 10px rgba(0, 0, 0, 0.3);
+            border: 3px solid #ffffff;
+            transition: all 0.2s ease;
+        }
+
+        .slider::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+            box-shadow: 0 0 25px rgba(28, 105, 212, 0.8), 0 6px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .slider::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--bmw-blue) 0%, var(--electric-blue) 100%);
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(28, 105, 212, 0.6);
+            border: 3px solid #ffffff;
+        }
+
+        .value-display {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff 0%, var(--electric-blue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .value-unit {
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 500;
+        }
+
+        .help-text {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.85rem;
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        /* Button Styling */
+        .btn-primary {
+            width: 100%;
+            padding: 20px 30px;
+            background: linear-gradient(135deg, var(--bmw-blue) 0%, var(--electric-blue) 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(28, 105, 212, 0.4);
+            font-family: inherit;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(28, 105, 212, 0.6);
+        }
+
+        .btn-primary:active {
+            transform: translateY(-1px);
+        }
+
+        /* AI Assistant Card */
+        .ai-card {
+            background: linear-gradient(145deg, rgba(28, 105, 212, 0.2) 0%, rgba(0, 212, 255, 0.15) 100%);
+            border: 2px solid rgba(28, 105, 212, 0.3);
+        }
+
+        .ai-card .input-field {
+            background: rgba(0, 0, 0, 0.3);
+            border-color: rgba(28, 105, 212, 0.3);
+        }
+
+        .ai-card .input-field:focus {
+            border-color: var(--electric-blue);
+            box-shadow: 0 0 0 4px rgba(0, 212, 255, 0.2);
+        }
+
+        .btn-ai {
+            background: linear-gradient(135deg, var(--electric-blue) 0%, var(--bmw-blue) 100%);
+        }
+
+        /* Divider */
+        .divider {
+            text-align: center;
+            margin: 40px 0;
+            color: rgba(255, 255, 255, 0.5);
+            font-weight: 500;
+            position: relative;
+            font-size: 0.9rem;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 40%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(28, 105, 212, 0.5), transparent);
+        }
+
+        .divider::before {
+            left: 0;
+        }
+
+        .divider::after {
+            right: 0;
+        }
+
+        /* Results Section */
+        .results {
+            display: none;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .results.show {
+            display: block;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-header {
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(135deg, rgba(28, 105, 212, 0.3) 0%, rgba(0, 212, 255, 0.2) 100%);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            border: 2px solid rgba(28, 105, 212, 0.3);
+        }
+
+        .result-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #ffffff 0%, var(--electric-blue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 12px 28px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 1rem;
+            margin-top: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .status-badge.success {
+            background: linear-gradient(135deg, var(--success-green) 0%, #00e676 100%);
+            color: white;
+            box-shadow: 0 0 20px rgba(0, 200, 83, 0.4);
+        }
+
+        .status-badge.warning {
+            background: linear-gradient(135deg, var(--warning-orange) 0%, #ff9100 100%);
+            color: white;
+            box-shadow: 0 0 20px rgba(255, 109, 0, 0.4);
+        }
+
+        /* Info Grid */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .info-card {
+            background: linear-gradient(145deg, rgba(45, 45, 45, 0.8) 0%, rgba(26, 26, 26, 0.8) 100%);
+            padding: 25px;
+            border-radius: 16px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(28, 105, 212, 0.5);
+            box-shadow: 0 10px 30px rgba(28, 105, 212, 0.3);
+        }
+
+        .info-label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 10px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .info-value {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff 0%, var(--electric-blue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 80px;
+            display: none;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            border: 6px solid rgba(28, 105, 212, 0.2);
+            border-top: 6px solid var(--electric-blue);
+            border-radius: 50%;
+            width: 70px;
+            height: 70px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 30px;
+            box-shadow: 0 0 30px rgba(28, 105, 212, 0.5);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+
+        /* Select Styling */
+        select.input-field {
+            cursor: pointer;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23ffffff' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            padding-right: 45px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.2rem;
+            }
+
+            .dashboard-card {
+                padding: 25px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <div class="hero-content">
+            <div class="logo-section">
+                <div class="bmw-logo">BMW</div>
+            </div>
+            <h1 class="hero-title">i3 Route Planner</h1>
+            <p class="hero-subtitle">Intelligent Electric Journey Planning with AI-Powered Assistance</p>
+        </div>
+        </div>
+
+    <div class="container">
+        <!-- AI Assistant Section -->
+        <div class="dashboard-card ai-card">
+            <div class="card-header">
+                <div class="card-icon">🤖</div>
+                <div>
+                    <div class="card-title">AI Assistant</div>
+                    <div class="card-subtitle">Describe your trip in natural language</div>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <textarea id="aiQuery" class="input-field" rows="4" placeholder="e.g., I'm going from Hollywood to Long Beach via Santa Monica with 30% battery in rainy weather, driving aggressively"></textarea>
+            </div>
+
+            <button onclick="askAI()" class="btn-primary btn-ai">🚀 Ask AI Assistant</button>
+
+            <div id="aiResponse" style="display: none; margin-top: 30px; padding: 25px; background: rgba(0, 0, 0, 0.3); border-radius: 16px; border: 1px solid rgba(28, 105, 212, 0.3);">
+                <div id="aiResponseContent"></div>
+            </div>
+        </div>
+
+        <div class="divider">— OR USE THE DASHBOARD BELOW —</div>
+
+        <!-- Route Planning Dashboard -->
+        <div class="dashboard-card">
+            <div class="card-header">
+                <div class="card-icon">📍</div>
+                <div>
+                    <div class="card-title">Route Planning Dashboard</div>
+                    <div class="card-subtitle">Configure your journey parameters</div>
+                </div>
+        </div>
+
+            <form id="routeForm">
+                <div class="input-group">
+                    <label class="input-label" for="startLocation">📍 Starting Point</label>
+                    <input type="text" id="startLocation" class="input-field" placeholder="e.g., Hollywood, Los Angeles" required>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label" for="endLocation">🎯 Destination</label>
+                    <input type="text" id="endLocation" class="input-field" placeholder="e.g., Santa Monica, CA" required>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label" for="batteryPercent">🔋 Battery Level</label>
+                    <div class="gauge-container">
+                        <svg class="gauge-svg" width="200" height="200">
+                            <defs>
+                                <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" style="stop-color:#ef4444;stop-opacity:1" />
+                                    <stop offset="50%" style="stop-color:#f59e0b;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#10b981;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                            <circle class="gauge-background" cx="100" cy="100" r="90"></circle>
+                            <circle class="gauge-fill" id="batteryGauge" cx="100" cy="100" r="90"></circle>
+                        </svg>
+                        <div class="gauge-value">
+                            <div class="gauge-number" id="batteryValue">80</div>
+                            <div class="gauge-unit">%</div>
+                        </div>
+                    </div>
+                    <input type="range" id="batteryPercent" class="slider" min="0" max="100" value="80">
+                    <div class="gauge-label">Current Battery Charge</div>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label" for="gasPedalLevel">🚗 Acceleration Level</label>
+                    <div class="slider-container">
+                        <input type="range" id="gasPedalLevel" class="slider" min="0" max="100" value="50">
+                    </div>
+                    <div class="value-display">
+                        <span id="gasPedalValue">50</span>
+                        <span class="value-unit">%</span>
+                    </div>
+                    <p class="help-text">Higher values indicate more aggressive acceleration</p>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label" for="brakePedalLevel">🛑 Braking Frequency</label>
+                    <div class="slider-container">
+                        <input type="range" id="brakePedalLevel" class="slider" min="0" max="100" value="20">
+                    </div>
+                    <div class="value-display">
+                        <span id="brakePedalValue">20</span>
+                        <span class="value-unit">%</span>
+                    </div>
+                    <p class="help-text">Higher values indicate more frequent/aggressive braking</p>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label" for="weatherConditions">🌤️ Weather Conditions</label>
+                    <select id="weatherConditions" class="input-field">
+                        <option value="clear">☀️ Clear/Sunny</option>
+                        <option value="cloudy">☁️ Cloudy</option>
+                        <option value="rain">🌧️ Rain</option>
+                        <option value="heavy_rain">⛈️ Heavy Rain</option>
+                        <option value="snow">❄️ Snow</option>
+                        <option value="windy">💨 Windy</option>
+                        <option value="extreme_heat">🔥 Extreme Heat</option>
+                        <option value="cold">🧊 Cold Weather</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-primary">🚗 Plan My Route</button>
+            </form>
+        </div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Calculating optimal route...</p>
+        </div>
+
+        <div class="results" id="results">
+            <div class="dashboard-card">
+                <div class="result-header">
+                    <h2 class="result-title" id="routeTitle"></h2>
+                    <div class="status-badge" id="statusBadge"></div>
+                </div>
+
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-label">Total Distance</div>
+                        <div class="info-value" id="totalDistance">-</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-label">Current Range</div>
+                        <div class="info-value" id="currentRange">-</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-label">Max Range</div>
+                        <div class="info-value" id="maxRange">-</div>
+                    </div>
+                    <div class="info-card" id="consumptionItem" style="display: none;">
+                        <div class="info-label">Consumption</div>
+                        <div class="info-value" id="adjustedConsumption" style="font-size: 1.5rem;">-</div>
+                    </div>
+                </div>
+
+                <div id="drivingFactorsSection" class="dashboard-card" style="display: none; margin-top: 30px;">
+                    <div class="card-header">
+                        <div class="card-icon">📊</div>
+                        <div class="card-title">Driving Factors Impact</div>
+                    </div>
+                    <div class="info-grid">
+                        <div class="info-card">
+                            <div class="info-label">Gas Pedal</div>
+                            <div class="info-value" id="gasPedalFactor" style="font-size: 1.3rem;">-</div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-label">Brake Pedal</div>
+                            <div class="info-value" id="brakePedalFactor" style="font-size: 1.3rem;">-</div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-label">Weather</div>
+                            <div class="info-value" id="weatherFactor" style="font-size: 1.3rem;">-</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="chargingPlanSection" style="display: none; margin-top: 30px;">
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <div class="card-icon">📋</div>
+                            <div class="card-title">Detailed Charging Plan</div>
+                        </div>
+                        <div id="chargingPlanContent" style="padding: 20px;">
+                        <!-- Plan content will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+
+                <div id="chargingSection" style="display: none; margin-top: 30px;">
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <div class="card-icon">⚡</div>
+                            <div class="card-title">Recommended Charging Stations</div>
+                        </div>
+                        <div id="stationsList" style="margin-top: 20px;"></div>
+                    </div>
+                </div>
+
+                <div id="mapSection" style="display: none; margin-top: 30px;">
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <div class="card-icon">🗺️</div>
+                            <div class="card-title">Route Map</div>
+                        </div>
+                        <iframe id="mapFrame" width="100%" height="500" style="border:0; border-radius: 16px; margin-top: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);" loading="lazy" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const batterySlider = document.getElementById('batteryPercent');
+        const batteryValue = document.getElementById('batteryValue');
+        const batteryGauge = document.getElementById('batteryGauge');
+        const gasPedalSlider = document.getElementById('gasPedalLevel');
+        const gasPedalValue = document.getElementById('gasPedalValue');
+        const brakePedalSlider = document.getElementById('brakePedalLevel');
+        const brakePedalValue = document.getElementById('brakePedalValue');
+        const routeForm = document.getElementById('routeForm');
+        const loading = document.getElementById('loading');
+        const results = document.getElementById('results');
+
+        // Update battery gauge
+        function updateBatteryGauge(value) {
+            const circumference = 2 * Math.PI * 90;
+            const offset = circumference - (value / 100) * circumference;
+            batteryGauge.style.strokeDashoffset = offset;
+            batteryValue.textContent = value;
+        }
+
+        updateBatteryGauge(80);
+
+        batterySlider.addEventListener('input', (e) => {
+            updateBatteryGauge(e.target.value);
+        });
+
+        gasPedalSlider.addEventListener('input', (e) => {
+            gasPedalValue.textContent = e.target.value;
+        });
+
+        brakePedalSlider.addEventListener('input', (e) => {
+            brakePedalValue.textContent = e.target.value;
+        });
+
+        // AI Assistant Function
+        async function askAI() {
+            const query = document.getElementById('aiQuery').value.trim();
+            const aiResponse = document.getElementById('aiResponse');
+            const aiResponseContent = document.getElementById('aiResponseContent');
+
+            if (!query) {
+                alert('Please enter your trip description');
+                return;
+            }
+
+            aiResponseContent.innerHTML = '<div style="text-align: center;"><div class="spinner" style="margin: 0 auto 10px;"></div><p>Asking AI...</p></div>';
+            aiResponse.style.display = 'block';
+
+            try {
+                const response = await fetch('http://localhost:5001/api/ask-llm', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ query: query })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    const formattedMessage = data.message
+                        .replace(/\*\*(.*?)\*\*/g, '<strong style="color: var(--electric-blue);">$1</strong>')
+                        .replace(/\n/g, '<br>');
+
+                    aiResponseContent.innerHTML = `
+                        <div style="line-height: 1.8; font-size: 1.05rem; color: rgba(255,255,255,0.9);">
+                            ${formattedMessage}
+                        </div>
+                    `;
+                } else {
+                    aiResponseContent.innerHTML = `
+                        <div style="text-align: center;">
+                            <p style="font-size: 1.1rem; margin-bottom: 12px; color: var(--danger-red);">❌ ${data.message}</p>
+                            ${data.suggestion ? `<p style="opacity: 0.8; font-size: 0.95rem;">${data.suggestion}</p>` : ''}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                aiResponseContent.innerHTML = `
+                    <div style="text-align: center;">
+                        <p style="font-size: 1.1rem; color: var(--danger-red);">❌ Failed to connect to AI. Make sure the backend is running.</p>
+                    </div>
+                `;
+                console.error(error);
+            }
+        }
+
+        // Handle form submission
+        routeForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const startLocation = document.getElementById('startLocation').value;
+            const endLocation = document.getElementById('endLocation').value;
+            const batteryPercent = batterySlider.value;
+            const gasPedalLevel = gasPedalSlider.value;
+            const brakePedalLevel = brakePedalSlider.value;
+            const weatherConditions = document.getElementById('weatherConditions').value;
+
+            loading.classList.add('show');
+            results.classList.remove('show');
+
+            try {
+                const response = await fetch('http://localhost:5001/api/plan-route', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        start_location: startLocation,
+                        end_location: endLocation,
+                        battery_percent: parseFloat(batteryPercent),
+                        gas_pedal_level: parseFloat(gasPedalLevel),
+                        brake_pedal_level: parseFloat(brakePedalLevel),
+                        weather_conditions: weatherConditions
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    displayResults(data);
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (error) {
+                alert('Failed to connect to server. Make sure the backend is running.');
+                console.error(error);
+            } finally {
+                loading.classList.remove('show');
+            }
+        });
+
+        function displayResults(data) {
+            let routeTitle = data.start_location;
+            if (data.waypoints && data.waypoints.length > 0) {
+                routeTitle += ' → ' + data.waypoints.join(' → ');
+            }
+            routeTitle += ` → ${data.end_location}`;
+            document.getElementById('routeTitle').textContent = routeTitle;
+
+            const statusBadge = document.getElementById('statusBadge');
+            if (data.needs_charging) {
+                statusBadge.textContent = '⚠️ Charging Required';
+                statusBadge.className = 'status-badge warning';
+            } else {
+                statusBadge.textContent = '✅ Sufficient Range';
+                statusBadge.className = 'status-badge success';
+            }
+
+            document.getElementById('totalDistance').textContent = `${data.total_distance_km} km`;
+            document.getElementById('currentRange').textContent = `${data.current_range_km} km`;
+            document.getElementById('maxRange').textContent = `${data.max_range_km} km`;
+
+            if (data.adjusted_consumption_kwh_100km) {
+                const consumptionItem = document.getElementById('consumptionItem');
+                const adjustedConsumption = document.getElementById('adjustedConsumption');
+                consumptionItem.style.display = 'block';
+                adjustedConsumption.textContent = `${data.adjusted_consumption_kwh_100km} kWh/100km`;
+            }
+            
+            if (data.driving_factors) {
+                const factorsSection = document.getElementById('drivingFactorsSection');
+                factorsSection.style.display = 'block';
+                
+                const factors = data.driving_factors;
+                document.getElementById('gasPedalFactor').textContent = 
+                    `${factors.gas_pedal_level}% (${(factors.gas_pedal_multiplier * 100).toFixed(0)}% eff.)`;
+                document.getElementById('brakePedalFactor').textContent = 
+                    `${factors.brake_pedal_level}% (${(factors.brake_pedal_multiplier * 100).toFixed(0)}% eff.)`;
+                
+                const weatherLabels = {
+                    'clear': '☀️ Clear',
+                    'cloudy': '☁️ Cloudy',
+                    'rain': '🌧️ Rain',
+                    'heavy_rain': '⛈️ Heavy Rain',
+                    'snow': '❄️ Snow',
+                    'windy': '💨 Windy',
+                    'extreme_heat': '🔥 Extreme Heat',
+                    'cold': '🧊 Cold'
+                };
+                document.getElementById('weatherFactor').textContent = 
+                    `${weatherLabels[factors.weather_conditions] || factors.weather_conditions} (${(factors.weather_multiplier * 100).toFixed(0)}% eff.)`;
+            }
+
+            const chargingPlanSection = document.getElementById('chargingPlanSection');
+            const chargingPlanContent = document.getElementById('chargingPlanContent');
+
+            if (data.charging_plan) {
+                const plan = data.charging_plan;
+                chargingPlanContent.innerHTML = `
+                    <div style="margin-bottom: 24px; padding: 20px; background: rgba(28, 105, 212, 0.1); border-radius: 12px; border: 1px solid rgba(28, 105, 212, 0.3);">
+                        <h4 style="font-size: 1.4rem; margin-bottom: 12px; font-weight: 700; color: var(--electric-blue);">🎯 ${plan.recommended_station}</h4>
+                        <p style="opacity: 0.9; font-size: 1.05rem; color: rgba(255,255,255,0.8);">📍 ${plan.station_address}</p>
+                    </div>
+                    
+                    <div class="info-grid" style="margin: 24px 0;">
+                        <div class="info-card">
+                            <div class="info-label">Distance to Station</div>
+                            <div class="info-value">${plan.distance_to_station_km} km</div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-label">Battery on Arrival</div>
+                            <div class="info-value">${plan.battery_on_arrival_percent}%</div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-label">Charge Amount</div>
+                            <div class="info-value">${plan.charge_amount_kwh} kWh</div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-label">Target Battery</div>
+                            <div class="info-value">${plan.target_battery_percent}%</div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-label">Charging Time</div>
+                            <div class="info-value">${plan.estimated_charging_time_min} min</div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-label">Estimated Cost</div>
+                            <div class="info-value" style="font-size: 1.5rem;">${plan.estimated_cost}</div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: rgba(0, 0, 0, 0.3); padding: 24px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
+                        <h5 style="font-size: 1.1rem; margin-bottom: 16px; font-weight: 600; color: var(--electric-blue);">📝 Step-by-Step Plan:</h5>
+                        ${plan.steps.map(step => `<div style="padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 0.95rem; color: rgba(255,255,255,0.9);">${step}</div>`).join('')}
+                    </div>
+                `;
+                chargingPlanSection.style.display = 'block';
+            } else {
+                chargingPlanSection.style.display = 'none';
+            }
+
+            const chargingSection = document.getElementById('chargingSection');
+            const stationsList = document.getElementById('stationsList');
+            const sectionTitle = chargingSection.querySelector('.card-title');
+
+            if (data.charging_stations && data.charging_stations.length > 0) {
+                if (data.needs_charging) {
+                    sectionTitle.textContent = '⚡ Recommended Charging Stations (Charging Required)';
+                } else {
+                    sectionTitle.textContent = '🔌 Charging Stations Along Your Route';
+                }
+
+                chargingSection.style.display = 'block';
+                stationsList.innerHTML = data.charging_stations.map((station, index) => `
+                    <div class="dashboard-card" style="margin-bottom: 20px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                            <div style="font-size: 1.3rem; font-weight: 700; color: var(--electric-blue);">${index + 1}. ${station.name}</div>
+                            ${station.rating !== 'N/A' ? `<div style="background: linear-gradient(135deg, var(--warning-orange) 0%, #ff9100 100%); color: white; padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 0.9rem;">⭐ ${station.rating}</div>` : ''}
+                        </div>
+                        <div style="color: rgba(255,255,255,0.7); line-height: 1.8; margin-bottom: 16px;">
+                            📍 ${station.address}<br>
+                            🚗 ${station.distance_from_start_km} km from start<br>
+                            ⚡ ${station.charger_type} | ${station.network}<br>
+                            💰 ${station.pricing}
+                        </div>
+                        <a href="${station.map_link}" target="_blank" style="display: inline-block; padding: 12px 24px; background: linear-gradient(135deg, var(--bmw-blue) 0%, var(--electric-blue) 100%); color: white; text-decoration: none; border-radius: 10px; font-weight: 600; transition: all 0.3s ease;">
+                            🗺️ View on Google Maps
+                        </a>
+                    </div>
+                `).join('');
+            } else {
+                chargingSection.style.display = 'none';
+            }
+
+            generateMap(data);
+            results.classList.add('show');
+            results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function generateMap(data) {
+            const mapSection = document.getElementById('mapSection');
+            const mapFrame = document.getElementById('mapFrame');
+
+            const origin = `${data.start_coords[0]},${data.start_coords[1]}`;
+            const destination = `${data.end_coords[0]},${data.end_coords[1]}`;
+
+            let mapUrl = `https://www.google.com/maps/embed/v1/directions?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&origin=${origin}&destination=${destination}&mode=driving`;
+
+            if (data.charging_stations && data.charging_stations.length > 0) {
+                const waypoints = data.charging_stations
+                    .slice(0, 3)
+                    .map(station => `${station.latitude},${station.longitude}`)
+                    .join('|');
+                mapUrl += `&waypoints=${waypoints}`;
+            }
+
+            mapFrame.src = mapUrl;
+            mapSection.style.display = 'block';
+        }
+    </script>
+</body>
+
+</html>
